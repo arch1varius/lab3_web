@@ -1,7 +1,7 @@
 from django.db import models
 
 class Airline(models.Model):
-    company_name = models.CharField(max_length=50)
+    company_name = models.CharField(max_length=50, primary_key=True)
     owner = models.CharField(max_length=50)
     number_of_employees = models.IntegerField()
 
@@ -9,7 +9,7 @@ class Airline(models.Model):
         return self.company_name
 
 class AircraftModel(models.Model):
-    model_number = models.IntegerField(primary_key=True)
+    model_number = models.CharField(primary_key=True, max_length=50)
     manufacturer = models.CharField(max_length=30)
     type = models.CharField(max_length=20)
     number_of_seats = models.IntegerField()
@@ -19,11 +19,11 @@ class AircraftModel(models.Model):
     payload_capacity = models.IntegerField()
 
     def __str__(self):
-        return f"{self.manufacturer} - {self.type}"
+        return f"{self.manufacturer} - {self.model_number}"
 
 class Aircraft(models.Model):
     onBoard_number = models.CharField(max_length=20, primary_key=True)
-    company_name = models.ForeignKey(Airline, on_delete=models.CASCADE)
+    company_name = models.ForeignKey(Airline, to_field='company_name', on_delete=models.CASCADE)
     flight_hours = models.IntegerField()
     last_maintenance_date = models.DateField()
     manufacture_date = models.DateField()
